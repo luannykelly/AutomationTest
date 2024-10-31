@@ -1,14 +1,8 @@
 package support;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class BasePage {
     protected WebDriver driver;
@@ -41,24 +35,6 @@ public class BasePage {
         }
     }
 
-    public void clickElementById(String elementId) {
-        WebElement element = driver.findElement(By.id(elementId));
-        element.click();
-    }
-
-    public WebElement waitForElementById(String elementId, int timeoutInSeconds) {
-        return new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds))
-                .until(ExpectedConditions.visibilityOfElementLocated(By.id(elementId)));
-    }
-
-    public void setChromeDriverPath(String path) {
-        this.chromeDriverPath = path;
-        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-        if (driver != null) {
-            driver.quit();
-        }
-        driver = new ChromeDriver(new ChromeOptions());
-    }
 
     public WebDriver getDriver() {
         return driver;

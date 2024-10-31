@@ -23,8 +23,8 @@ public class StepsAutomation {
         page = new InsurancePage(driver);
     }
 
-    @Given("i am on the page web")
-    public void i_am_on_the_page_web() {
+    @Given("i am on the website")
+    public void i_am_on_the_website() {
         String url = "http://sampleapp.tricentis.com/101/app.php";
         basePage.openUrl(url);
     }
@@ -62,9 +62,11 @@ public class StepsAutomation {
 
     @Then("i should see the message {string} on screen")
     public void i_should_see_the_message_on_screen(String expectedMessage) {
-        String actualMessage = String.valueOf(page.verifySuccessMessage());
+        String actualMessage = page.verifySuccessMessage();
+        System.out.println("Real message: " + actualMessage);
         Assert.assertEquals("Expected success message not found on screen", expectedMessage, actualMessage);
     }
+
 
     @After
     public void tearDown() {

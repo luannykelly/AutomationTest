@@ -1,8 +1,6 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -26,7 +24,7 @@ public class InsurancePage {
         driver.findElement(By.id("engineperformance")).sendKeys("90");
         driver.findElement(By.id("dateofmanufacture")).sendKeys("12/03/2020");
         new Select(driver.findElement(By.id("numberofseats"))).selectByVisibleText("5");
-        driver.findElement(By.id("righthanddriveyes")).click();
+        driver.findElement(By.className("ideal-radiocheck-label")).click();
         new Select(driver.findElement(By.id("numberofseatsmotorcycle"))).selectByVisibleText("2");
         new Select(driver.findElement(By.id("fuel"))).selectByVisibleText("Diesel");
         driver.findElement(By.id("payload")).sendKeys("120");
@@ -42,32 +40,40 @@ public class InsurancePage {
         driver.findElement(By.id("firstname")).sendKeys("John");
         driver.findElement(By.id("lastname")).sendKeys("Whitehorse");
         driver.findElement(By.id("birthdate")).sendKeys("09/12/1980");
-        driver.findElement(By.id("gendermale")).click();
+        WebElement genderMale = driver.findElement(By.id("gendermale"));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();", genderMale);
         driver.findElement(By.id("streetaddress")).sendKeys("1600 Fake Street");
         new Select(driver.findElement(By.id("country"))).selectByVisibleText("United States");
         driver.findElement(By.id("zipcode")).sendKeys("94043");
         driver.findElement(By.id("city")).sendKeys("Mountain View");
         new Select(driver.findElement(By.id("occupation"))).selectByVisibleText("Selfemployed");
-        driver.findElement(By.id("skydiving")).click();
+        WebElement element = driver.findElement(By.id("speeding"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         driver.findElement(By.id("website")).sendKeys("www.johnwhitehorseshoes.com");
         driver.findElement(By.id("nextenterproductdata")).click();
     }
 
     public void fillOutEnterProductData() {
         waitForElement(By.id("startdate"));
-        driver.findElement(By.id("startdate")).sendKeys("12/01/2024");
+        driver.findElement(By.id("startdate")).sendKeys("01/02/2025");
         new Select(driver.findElement(By.id("insurancesum"))).selectByVisibleText("30.000.000,00");
         new Select(driver.findElement(By.id("meritrating"))).selectByVisibleText("Bonus 7");
         new Select(driver.findElement(By.id("damageinsurance"))).selectByVisibleText("Full Coverage");
-        driver.findElement(By.id("legaldefenseinsurance")).click();
+        WebElement checkbox = driver.findElement(By.id("LegalDefenseInsurance"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].style.left = '0px';", checkbox);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkbox);
         new Select(driver.findElement(By.id("courtesycar"))).selectByVisibleText("Yes");
         driver.findElement(By.id("nextselectpriceoption")).click();
     }
 
     public void fillOutSelectPriceOption() {
-        waitForElement(By.id("selectplatinum"));
-        driver.findElement(By.id("selectplatinum")).click();
-        driver.findElement(By.id("nextsendquote")).click();
+        waitForElement(By.id("selectgold"));
+        WebElement selectGold = driver.findElement(By.id("selectgold"));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();", selectGold);
+        WebElement nextButton = driver.findElement(By.id("nextsendquote"));
+        js.executeScript("arguments[0].click();", nextButton);
     }
 
     public void fillOutSendQuote() {
@@ -80,19 +86,20 @@ public class InsurancePage {
         driver.findElement(By.id("sendemail")).click();
     }
 
-    public boolean verifySuccessMessage() {
-        waitForElement(By.xpath("/html/body/div[4]/h2"));
-        WebElement message = driver.findElement(By.xpath("/html/body/div[4]/h2"));
-        return message.getText().equals("Sending e-mail success");
+    public String verifySuccessMessage() {
+        try {
+            waitForElement(By.xpath("/html/body/div[4]/h2"));
+            WebElement message = driver.findElement(By.xpath("/html/body/div[4]/h2"));
+            return message.getText();
+        } catch (NoSuchElementException e) {
+            return "";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
-    public void verifyUser() {
-        waitForElement(By.className("sa-placeholder"));
-        WebElement user = wait.until(ExpectedConditions.elementToBeClickable(By.className("sa-placeholder")));
-        driver.findElement(By.className("sa-placeholder"));
-    }
-
-    private void waitForElement(By by) {
+    private void waitForElement(By by) { //verifica o objeto antes das ações
         wait.until(ExpectedConditions.visibilityOfElementLocated(by));
     }
 }
